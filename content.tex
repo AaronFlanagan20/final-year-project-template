@@ -24,11 +24,11 @@ Further into this report will contain a breakdown and give an in-depth explanati
 \end{itemize}
 
 This project can be found on Github under the name AaronFlanagan20 or CiaranB1992: https://github.com/AaronFlanagan20/CollegeEssentialsApp.
-The repository contains a small ReadME file about how to download and run the application. The repository holds all the classes and native android files created and used by Android Studio to compile and run the project. Your computer or laptop must support virtualization, this can be checked by attempting to install Intel's hardware accelerator software or by checking for in the task manager of your machine. If said machine doesn't support it, you will be unable to run the emulator, instead you must plug in an android device with the developer options enabled.
+The repository contains a small ReadMe file about how to download and run the application. The repository holds all the classes and native android files created and used by Android Studio to compile and run the project. Your computer or laptop must support virtualization, this can be checked by attempting to install Intel's hardware accelerator software or by checking for in the task manager of your machine. If said machine doesn't support it, you will be unable to run the emulator, instead you must plug in an android device with the developer options enabled.
 
 \chapter{Methodology}
 \section{Planning}
-The first process of the project was planning everything that had to be done. This included when to hold meetings, what software to use for the development, what methodology to approach it with and how to test it appropriately. The first task finished was the creation of a project work flow to create a timely estimate of how long each feature will need and take into account other responsibilities the developers might have with other projects and reports. The project work flow or Gantt chart, was developed to show everything that needed to be done. It leaves out the section that assigns each individual developer to a particular area or feature because the list of features was not particularly large enough to scale out seven months of development and it was more beneficial to work as a pair due to the methodology taken. See Figure 1.
+The first process of the project was planning everything that had to be done. This included when to hold meetings, what software to use for the development, what methodology to approach it with and how to test it appropriately. The first task finished was the creation of a project work flow to create a timely estimate of how long each feature will need and take into account other responsibilities the developers might have with other projects and reports. The project work flow or Gantt chart, was developed to show everything that needed to be done. It leaves out the section that assigns each individual developer to a particular area or feature because the list of features was not particularly large enough to scale out seven months of development and it was more beneficial to work as a pair due to the methodology taken. See Figure 2.1.
 
 \section{Software Methodology}
 Next was the decision of which methodology to pursue. It was decided this project would be developed based on Agile methodologies. "Agile methodology is an alternative to traditional project management, typically used in software development. It helps teams respond to unpredictability through incremental, iterative work cadences, known as sprints "~\cite{agile}. The traditional waterfall approach was not taken due to it's limitations put on each phase of the project. Each section had to completed in sequential order and time did not permit backtracking if a problem arised. Instead an incremental approach was taken. Both developers met up to discuss which feature to work on and to begin working on it by researching previously made work and reading through the Android documentation to find relative libraries available. This meant that each feature could be developed no matter how long it took to finish and different approaches could be taken. One feature may have taken a week at most to develop allowing  more time to improve it, while the next might have taken a month to complete. It also allowed more research and the ability to develop up-to date documentation and code during the development of each feature. If the code was re-factored or a different approach was taken that differed from the pre-determined plan specified at the beginning of this project, the developers where free to make the change and it was documented. During the development of that feature however, an iterative approach was taken. Each developer would plan, develop and test the feature and resort back to the original documentation to evaluate it. The same process would be taken again until the feature was eventually finished. At the end of each features cycle a meeting was held to discuss and evaluate it with the supervisor. These consisted of ideas on how to improve it or how to begin on the next. 
@@ -77,14 +77,42 @@ As many pages as needed.
 \end{table}
 
 \chapter{System Evaluation}
-As many pages as needed.
+\section{Memory and Server}
+The database management system used is Sqlite. This was chosen because all mobile platforms support it. This enables the phone to have a certain degree of control on what information to get when needed. Once the user selects a college on start-up of the application a database with the college name is created on the phone allowing each selection to have it's own database to store a timetable, assignments and custom google map markers the user may have placed. The database model is quite simple. It stores two tables Timetable and Assignment. Timetable contains three columns room, teacher and subject, while Assignment contains two, subject and due-date. With information stored in multiple databases the applications overall size averages around 27.5 mb, which compared to a huge application likes Facebook's social network it is miniscule because Facebook's is currently at 365mb. 
+A connection is also made to Heroku's Postgresql database to pull down an image of the college stored and all the co-ordinates needed for the navigation section. It was done this way to save memory on the phone. Instead of each database per college storing the image and wasting memory it retrieves the binary of said image and re-converts it to a bitmap from the main screen every time the application is used and places it on screen. To do this a separate project was made to act as the Heroku maintenance code of the database, also using java. This code is used to test the pushing and pulling of information to the server. Once everything is pushed up it never has to be done again, but the code is then integrated into the project to deal with retrieving the image.
+
+
+\section{Universality}
+A decision to make the application universal was made during the development. All students can use the timetable and assignment features and the navigation section will be constantly updated to allow other various colleges to use it. However at the moment the application is only accessible to Android users. Android was chosen because it's native language is java and this is well-known by the developers. However the initial intentions of the project was for it to be available on all platforms. Different technologies exist that allow the application to be complied cross-platform to the IOS operating system for IPhone and Microsoft Windows operating system for Microsoft phones, but this was not accomplished because time ran out. The overall structure of the project will be concrete regardless of the operating system because of the platform neutral technologies chosen. The chosen database explained previously in the technology review of this report is Sqlite. Sqlite is supported by all mobile platforms as a database choice. The syntax of all the internal queries made in the application will remain the same. The same concept applies to the college selection, as previously explained Heroku's Postgresql database is entirely independent from the applications architecture. The only difference being the driver that enables the connection on each platform. Android uses java's JDBC driver to connect. This driver will be of no use to the other platforms because IOS is written in either Objective-C or Swift using the ODBC driver, and Windows is written using C-Sharp and uses the ADO.NET driver. This means each operating system specific deployment of the project will need to have it's own driver included and the syntax within the CollegeSelection class of the project will have to change slightly to replace the JDBC driver with the new one. Each language uses it's predefined driver in order to make a connection to Heroku's database and retrieve information based on an SQL query the application makes. This was done so the phone doesn't waste memory storing information on all colleges. See Figure 5.1.
+In conclusion the application is universal due to the number of colleges and universities that can use it. It can also be easily transformed to be cross-platform with some minor changes needed to one section of code that makes the initial connection.
+
+\pagebreak\section{Improvements}
+Each section of the application has areas where improvements could be made if more time was available. Below is a list of possible improvements that can be made in the future for the application in general and each individual section. 
 \begin{itemize}
-\item Prove that your software is robust. How? Testing etc. 
-\item Use performance benchmarks (space and time) if algorithmic.
-\item Measure the outcomes / outputs of your system / software against the objectives from the Introduction.
-\item Highlight any limitations or opportunities in your approach or technologies used.
+	\item Application: A priority queue added to handle threads because the current implementation creates a lag in the connection.
+	\item Application: Add in an instant messenger section for students to talk to one another about their timetables and current assignments.
+	\item Application: Add a section that users can personalize it to their preference.
+	
+	\item Camera navigation: More colleges and universities in the country can be added to the list.
+	\item Camera navigation: Better graphics can be used for augmented reality.
+	\item Camera navigation: More responsive software to deal with multiple locations within the geo-fencing area.
+	\item Camera API: A swap from the deprecated Camera API to the new camera API made available for newer Android SDK's. 
+	
+	\item Assignment: The ability for users to share assignments across platforms with each other.
+	\item Assignment: Section for lecturers to upload assignments and the users can just enrol to that assignment.
+	
+	\item Timetable: The ability for users to share timetables with each other.
+	\item Timetable: Section for colleges to upload timetables automatically and users can download it.
+	\item Timetable: Colour code each section of the timetable.
+	
+	\item Google Maps: Option to view each individual floor of a building being seen.
+	\item Google Maps: Provide directions from current location to a marker chosen by the user.
 \end{itemize}
 
+\begin{figure}
+	\includegraphics{img/connection-diagram.png}
+	\caption{Heroku Connection Diagram}
+\end{figure}
 \chapter{Conclusion}
 About three pages.
 
