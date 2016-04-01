@@ -23,7 +23,7 @@ Further into this report will contain a breakdown and give an in-depth explanati
 \item Conclusion: The final discussion about the project and evaluation of its finished state. Each section will be briefly concluded and its main points will be stated.
 \end{itemize}
 
-This project can be found on Github under the name AaronFlanagan20 or CiaranB1992: https://github.com/AaronFlanagan20/CollegeEssentialsApp.
+This project can be found on GitHub under the name AaronFlanagan20 or CiaranB1992: https://github.com/AaronFlanagan20/CollegeEssentialsApp.
 The repository contains a small ReadMe file about how to download and run the application. The repository holds all the classes and native android files created and used by Android Studio to compile and run the project. Your computer or laptop must support virtualization, this can be checked by attempting to install Intel's hardware accelerator software or by checking in the task manager of your machine. If your machine does not support it, you will be unable to run the emulator, instead you must plug in an android device with the developer options enabled.
 
 \chapter{Methodology}
@@ -34,7 +34,7 @@ The first step of the project was planning everything that had to be done. This 
 Next was the decision of which methodology to pursue. It was decided this project would be developed based on agile methodologies. "Agile methodology is an alternative to traditional project management, typically used in software development. It helps teams respond to unpredictability through incremental, iterative work cadences, known as sprints "~\cite{agile}. The traditional waterfall approach was not taken due to its limitations put on each phase of the project. Each section had to be completed in sequential order and time did not permit backtracking if a problem arouse. Instead an incremental approach was taken. Both developers met up to discuss which feature to work on and to begin working on it by researching previously made work and reading through the Android documentation to find relative libraries available. This meant that each feature could be developed no matter how long it took to finish and different approaches could be taken. One feature may have taken a week at most to develop allowing  more time to improve it, while the next might have taken a month to complete. It also allowed more research and the ability to develop up-to date documentation and code during the development of each feature. If the code was re-factored or a different approach was taken that differed from the pre-determined plan specified at the beginning of this project, the developers where free to make the change and it was documented. During the development of that feature however, an iterative approach was taken. Each developer would plan, develop and test the feature and resort back to the original documentation to evaluate it. The same process would be taken again until the feature was eventually finished. At the end of each features cycle a meeting was held to discuss and evaluate it with the supervisor. These consisted of ideas on how to improve it or how to begin on the next. 
 
 \section{Testing}
-At the end of a features cycle, some testing was performed before moving on. This project used three forms of testing. The first form of testing is Gradle, that is built into Android Studio. Gradle is a project build automation tool used to compile, test and run a native Java project and slow done build time and code freeze ups ~\cite{gradle}. It complies and runs the project within Android studio. Next used was CircleCI, CircleCI is a cloud platform used for continuous integration. Every time a commit was pushed up to the repository using git, CircleCI would pull down the code from Github and run a selection of tests on the new changes. If it passed the test the commit would integrate with the rest of the project on Github, if failed it would not be integrated until the problem was fixed via another commit to update and fix the changes or revert the commit to remove the changes. Finally the developers wrote tests for the application using JUnit. JUnit is "A unit testing framework which is a central element of the Extreme Programming (XP) testing practice."~\cite{junit} JUnit was used to test the actions of components in the application to see if they performed the way they were supposed to, example if a pop-up box is meant to display on the press of a button. 
+At the end of a features cycle, some testing was performed before moving on. This project used three forms of testing. The first form of testing is Gradle, that is built into Android Studio. Gradle is a project build automation tool used to compile, test and run a native Java project and slow done build time and code freeze ups ~\cite{gradle}. It complies and runs the project within Android studio. Next used was CircleCI, CircleCI is a cloud platform used for continuous integration. Every time a commit was pushed up to the repository using git, CircleCI would pull down the code from GitHub and run a selection of tests on the new changes. If it passed the test the commit would integrate with the rest of the project on GitHub, if failed it would not be integrated until the problem was fixed via another commit to update and fix the changes or revert the commit to remove the changes. Finally the developers wrote tests for the application using JUnit. JUnit is "A unit testing framework which is a central element of the Extreme Programming (XP) testing practice."~\cite{junit} JUnit was used to test the actions of components in the application to see if they performed the way they were supposed to, example if a pop-up box is meant to display on the press of a button. 
 \begin{figure}
 	\includegraphics{img/gannt.png}
 	\caption{Project Work Flow}
@@ -58,27 +58,114 @@ Here's some nicely formatted XML:
 \end{minted}
 
 \chapter{System Design}
-As many pages as needed.
-\begin{itemize}
-\item Architecture, UML etc. An overview of the different components of the system. Diagrams etc… Screen shots etc.
-\end{itemize}
+\section{Server connection}
+The system design is fairly straight forward. The first page is the CollegeSelection activity. This consists of a ListView object that contains a list of colleges in the country. Once a college is selected the application creates a database with the college's name using SQLite and makes a connection to Heroku's PostgreSQL database to retrieve the binary of image of chosen college to display it on the HomeScreen activity. In Android they use a UIThread to handle all the on screen displays and actions, this is the main thread. However they do not allow networking actions on this thread, a separate thread must be started and ran in the background. This was not possible because the Heroku connection need to be made to continue on. To tackle this problem the main UIThread is forced to wait for the connection thread to finish, this is not the best way to handle the problem but it served as a temporary solution until another can be found. The connection was made as follows:
 
-\begin{table}[h]
-  \centering
-  \begin{tabular}{x{2cm}p{3cm}}
-    \toprule \\
-    Column 1 & Column 2 \\
-    \midrule \\
-    Rows 2.1 & Row 2.2 \\
-    \bottomrule
-  \end{tabular}
-  \caption{A table.}
-  \label{table:mytable}
-\end{table}
+\begin{minted}{java}
+try {
+	connect.start();//start thread
+	connect.join();//forcing UI thread to wait until connection is complete
+}catch (InterruptedException e){
+	e.printStackTrace();
+}
+\end{minted}
+
+The connect thread created a Heroku connection which in turn called the connect method from it's constructor. The Thread.join() statement is forcing all other Threads to wait until it has finished. Below are two screen-shots of the application, and Figure 4.3 describes the flow of events that take place.
+
+\begin{figure}[!b]
+	\begin{minipage}[b]{0.47\textwidth}
+		\includegraphics{img/collegeselection.png}
+		\caption{CollegeSelection activity}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.47\textwidth}
+		\includegraphics{img/homescreen.png}
+		\caption{HomeScreen activity}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!hb]
+	\centering
+	\includegraphics{img/heroku-connection.png}
+	\caption{Connection to Heroku sequences}
+\end{figure}
+
+\clearpage
+\section{Database Technology}
+"SQLite is a software library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine. SQLite is the most widely deployed database engine in the world"~\cite{sqlite}. This database management system is independent and available on all mobile platforms. It uses the database query language SQL to insert, delete, update and query database tables made on the users phone and stores information relevant to the application. In Android two objects are used to create and maintain them, SQLiteDatabase exposes methods to manage a SQLite database and SQLiteHelper is a helper class to manage database creation and version management. The application contains three stand-alone tables: Timetable, Assignment and Markers. Timetable contains three columns: module name, room number and teacher name, assignment contains two columns: subject name and the due date and Marker contains three columns: marker name, the longitude and latitude of the selected place in the Google maps section.\newline
+
+\begin{figure}[h]
+	\includegraphics{img/Android-SQLite-Overview.png}
+	\caption{SQLite objects}~\cite{using-the-sqlite-database}
+\end{figure}
+
+\section{Timetable activity}
+The Timetable class of the project creates a screen of TextView objects in the form of columns and rows that represent the days Monday-Friday and times 9:00am - 6:00pm. By clicking a TextView box or by clicking the plus icon in the top right corner a new activity begins to enter in the subject, room, teacher, day and time. This all gets stored in the Timetable table of the database. On creation the class loops through the parent layout collects all TableRows in it, it then loops through every TableRow and selects all the TextView's each of them contain, it creates a temporary TextView object sets it's allowed boundaries and calls the paintTimetable() method.
+
+\begin{minted}{java}
+private void getAllTextViews() throws Exception {
+ for(int i = 1; i < layout.getChildCount(); i++){//loop through parent layout
+  if(layout.getChildAt(i) instanceof TableRow) {//get every child that's a TableRow
+   TableRow row = (TableRow) layout.getChildAt(i);//create temp TableRow
+   for(int x = 1; x < row.getChildCount(); x++){//loop through temp TableRow
+    if(row.getChildAt(x) instanceof TextView){//get every TextView in temp TableRow
+	 TextView temp = (TextView) row.getChildAt(x);//set child to temp
+	 temp.setOnClickListener(this);
+	 temp.setMaxWidth(temp.getWidth());//set size's
+	 temp.setMinWidth(temp.getWidth());		
+	 temp.setMaxHeight(temp.getWidth());
+	 temp.setMaxHeight(temp.getWidth());		
+	 paintTimetable(temp);//fill child with details stored in database
+    }
+   }
+  }
+ }
+}
+\end{minted}
+
+This method takes the TextView as an argument, calls the getIDName() method and retrieves the id in the form of day-time and checks the database for any information it may contain. In the unlikely case the view does not have an id it wil just return a blank string. A Cursor object is used in Android to loop through the database and store string variables of the data in each column. A check is done to see if the TextView's dy and time has any information stored under it and if so it sets the text to it and paints it on screen within the TextView's specified boundaries.
+\pagebreak
+
+\begin{minted}{java}
+private void paintTimetable(TextView view) throws Exception {
+ String id = getIDName(view, R.id.class).toLowerCase();//pass in an object and get it's id
+ String[] search = id.split("_");//split day from time (MON) _NINE
+ 
+ Cursor c = ad.returnTimetableData();//return all data from  database
+ 
+ if(c.moveToFirst()){
+  do{
+  // Collect each rows data
+  String module = c.getString(0);
+  String room = c.getString(1);
+  String teacher = c.getString(2);
+  String day = c.getString(3);
+  String time = c.getString(4);
+ 
+   if(day.equals(search[0]) && time.equals(search[1])){// if day = "mon" and time = "nine"
+    view.setText(String.format("%s\n%s\n%s", module, room, teacher));//paint details on screen
+   }
+ 
+  }while (c.moveToNext());//move to next row in database
+ }
+}
+\end{minted}
+
+\begin{figure}[b]
+	\begin{minipage}[h]{0.4\textwidth}
+		\includegraphics{img/collegeselection.png}
+		\caption{CollegeSelection activity}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[h]{0.4\textwidth}
+		\includegraphics{img/homescreen.png}
+		\caption{HomeScreen activity}
+	\end{minipage}
+\end{figure}
 
 \chapter{System Evaluation}
 \section{Memory and Server}
-The database management system used is SQLite. This was chosen because all mobile platforms support it. This enables the phone to have a certain degree of control on what information to get when needed. Once the user selects a college on start-up of the application a database with the college name is created on the phone allowing each selection to have its own database to store a timetable, assignments and custom google map markers the user may have placed. The database model is quite simple. It stores two tables Timetable and Assignment. Timetable contains three columns room, teacher and subject, while assignment contains two, subject and due-date. With information stored in multiple databases the applications overall size averages around 27.5 mb, which compared to a huge application likes Facebook's social network it is miniscule because Facebook's is currently at 365mb. 
+The database management system used is SQLite. This was chosen because all mobile platforms support it. This enables the phone to have a certain degree of control on what information to get when needed. Once the user selects a college on start-up of the application a database with the college name is created on the phone allowing each selection to have its own database to store a timetable, assignments and custom google map markers the user may have placed. The database model is quite simple. It stores two tables Timetable and Assignment. The Timetable activity contains three columns room, teacher and subject, while the assignment activity contains two, subject and due-date. With information stored in multiple databases the applications overall size averages around 27.5 mb, which compared to a huge application likes Facebook's social network it is miniscule because Facebook's is currently at 365mb. 
 A connection is also made to Heroku's PostgreSQL database to pull down an image of the college stored and all the co-ordinates needed for the navigation section. It was done this way to save memory on the phone. Instead of each database per college storing the image and wasting memory it retrieves the binary of said image and re-converts it to a bitmap from the main screen every time the application is used and places it on screen. To do this a separate project was made to act as the Heroku maintenance code of the database, also using java. This code is used to test the pushing and pulling of information to the server. Once everything is pushed up it never has to be done again, but the code is then integrated into the project to deal with retrieving the image.
 
 \section{Universality}
@@ -110,7 +197,7 @@ Each section of the application has areas where improvements could be made if mo
 
 \begin{figure}
 	\includegraphics{img/connection-diagram.png}
-	\caption{Heroku Connection Diagram}
+	\caption{Phone Driver Diagram}
 \end{figure}
 \chapter{Conclusion}
 About three pages.
