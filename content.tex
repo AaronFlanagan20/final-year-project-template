@@ -10,7 +10,7 @@ This project was developed by two 4th year development students, Aaron Flanagan 
 We would like to acknowledge and thank Damien Costello for supervising this project. His expert advice and support helped guide this project to completion. We would also like to acknowledge the Department of Computer science and Applied Physics for making this possible and helping us by providing support and any tools that were needed during the development.
 
 \chapter{Introduction}
-The original idea for this project was to develop a facial recognition music application. The application would begin by capturing an image of the users face and running a mood capturing algorithm to determine the users mood, and it would then generate a music file list based on the users mood. This projects foreground was going to include an animated graphical user interface through the use of the JavaFX library made available by Oracle ~\cite{javafx}. The background was running a facial detection program that was described by the OpenCV Team~\cite{opencv}. This algorithm was going to built upon to include facial recognition as it only produced facial detection on screen by drawing shape around the users face, but this needed a feature extraction algorithm to complete it and that's when the idea discovered a problem that could not be solved. We had to make a decision,  either change language or change the idea for the project. Since the developers are both competent in Java we decided to change the project rather than change the language. The reason we could not continue in Java was because we spent weeks of research and study involving different approaches of facial recognition and feature extraction it was found that there was no Java binding libraries to OpenCV or resources that we could use. After a week of searching nothing was found that could help us, but because it was still early into the year the project idea had to be changed as to avoid further problems and time delay.
+The original idea for this project was to develop a facial recognition music application. The application would begin by capturing an image of the users face and running a mood capturing algorithm to determine the users mood, and it would then generate a music file list based on the users mood. This projects foreground was going to include an animated graphical user interface through the use of the JavaFX library made available by Oracle ~\cite{javafx}. The background was running a facial detection program that was described by the OpenCV Team~\cite{opencv}. This algorithm was going to be built upon to include facial recognition as it only produced facial detection on screen by drawing shape around the users face, but this needed a feature extraction algorithm to complete it and that's when the idea discovered a problem that could not be solved. We had to make a decision,  either change language or change the idea for the project. Since the developers are both competent in Java we decided to change the project rather than change the language. The reason we could not continue in Java was because we spent weeks of research and study involving different approaches of facial recognition and feature extraction it was found that there was no Java binding libraries to OpenCV or resources that we could use. After a week of searching nothing was found that could help us, but because it was still early into the year the project idea had to be changed as to avoid further problems and time delay.
 
 It was October/November and the project was still at the beginning, GMIT hosted a hackathon for other colleges with software development courses to develop a project over a two day period. This time was used to explain the problem and come up with a new idea and build upon it until a clear project goal and list of possible features where decided on. Damien Costello was informed about the problem and advised that the project idea could be changed while it was still possible, he was understanding and suggested a few ideas of projects to think about and do some research into. Out of those ideas came the student application idea, the development of an integrated mobile application solely for the purpose of third level students. He suggested doing something in augmented reality. It was thought upon and we decided that the projects goal would be to build an application for students that includes, but not limited to, the augmented reality section in the form of navigation around the college in addition to using the Google maps API for the use of Google maps within our application. A list was constructed of things that tend to be a problem for students and academic staff managing multiple years of students. Further research was done into the market to see what was already done and available. Many developers have developed applications with timetables or notes for your phone screen but none could be found that contained all of these sections integrated into one application, or that where just institution specific. After deciding what kind of application was to be built, the platform technology had to be chosen, this included research into the available systems. Finally a list of features had to be narrowed down to include in the project, what features would be more beneficial and would provide better context to the final application.
 
@@ -70,7 +70,7 @@ try {
 }
 \end{minted}
 
-The connect thread created a Heroku connection which in turn called the connect method from it's constructor. The Thread.join() statement is forcing all other Threads to wait until it has finished. Below are two screen-shots of the application, and Figure 4.3 describes the flow of events that take place.
+The connect thread created a Heroku connection which in turn called the connect method from its constructor. The Thread.join() statement is forcing all other Threads to wait until it has finished. Below are two screen-shots of the application, and Figure 4.3 describes the flow of events that take place.
 
 \begin{figure}[!b]
 	\begin{minipage}[b]{0.47\textwidth}
@@ -100,7 +100,10 @@ The connect thread created a Heroku connection which in turn called the connect 
 \end{figure}
 
 \section{Timetable activity}
-The Timetable class of the project creates a screen of TextView objects in the form of columns and rows that represent the days Monday-Friday and times 9:00am - 6:00pm. By clicking a TextView box or by clicking the plus icon in the top right corner a new activity begins to enter in the subject, room, teacher, day and time. This all gets stored in the Timetable table of the database. On creation the class loops through the parent layout collects all TableRows in it, it then loops through every TableRow and selects all the TextView's each of them contain, it creates a temporary TextView object sets it's allowed boundaries and calls the paintTimetable() method.
+The Timetable class of the project creates a screen of TextView objects in the form of columns and rows that represent the days Monday-Friday and times 9:00am - 6:00pm. By clicking a TextView box or by clicking the plus icon in the top right corner a new activity begins to enter in the subject, room, teacher, day and time. This all gets stored in the Timetable table of the database. On creation the class loops through the parent layout collects all TableRows in it, it then loops through every TableRow and selects all the TextView's each of them contain, it creates a temporary TextView object sets it's allowed boundaries and calls the paintTimetable() method. See code snippet getAllTextViews().
+
+This method takes the TextView as an argument, calls the getIDName() method and retrieves the id in the form of day-time and checks the database for any information it may contain. In the unlikely case the view does not have an id it will just return a blank string. A Cursor object is used in Android to loop through the database and store string variables of the data in each column. A check is done to see if the TextView's day and time has any information stored under it and if so it sets the text to it and paints it on screen within the TextView's specified boundaries. See code paintTimetable()
+\pagebreak
 
 \begin{minted}{java}
 private void getAllTextViews() throws Exception {
@@ -109,8 +112,8 @@ private void getAllTextViews() throws Exception {
    TableRow row = (TableRow) layout.getChildAt(i);//create temp TableRow
    for(int x = 1; x < row.getChildCount(); x++){//loop through temp TableRow
     if(row.getChildAt(x) instanceof TextView){//get every TextView in temp TableRow
-	 TextView temp = (TextView) row.getChildAt(x);//set child to temp
-	 temp.setOnClickListener(this);
+     TextView temp = (TextView) row.getChildAt(x);//set child to temp
+ 	 temp.setOnClickListener(this);
 	 temp.setMaxWidth(temp.getWidth());//set size's
 	 temp.setMinWidth(temp.getWidth());		
 	 temp.setMaxHeight(temp.getWidth());
@@ -121,12 +124,7 @@ private void getAllTextViews() throws Exception {
   }
  }
 }
-\end{minted}
 
-This method takes the TextView as an argument, calls the getIDName() method and retrieves the id in the form of day-time and checks the database for any information it may contain. In the unlikely case the view does not have an id it wil just return a blank string. A Cursor object is used in Android to loop through the database and store string variables of the data in each column. A check is done to see if the TextView's dy and time has any information stored under it and if so it sets the text to it and paints it on screen within the TextView's specified boundaries.
-\pagebreak
-
-\begin{minted}{java}
 private void paintTimetable(TextView view) throws Exception {
  String id = getIDName(view, R.id.class).toLowerCase();//pass in an object and get it's id
  String[] search = id.split("_");//split day from time (MON) _NINE
@@ -151,15 +149,92 @@ private void paintTimetable(TextView view) throws Exception {
 }
 \end{minted}
 
-\begin{figure}[b]
-	\begin{minipage}[h]{0.4\textwidth}
-		\includegraphics{img/collegeselection.png}
-		\caption{CollegeSelection activity}
+\begin{figure}[!tbp]
+	\begin{minipage}[b]{0.47\textwidth}
+		\includegraphics{img/timetable.png}
+		\caption{Timetable activity}
 	\end{minipage}
 	\hfill
-	\begin{minipage}[h]{0.4\textwidth}
-		\includegraphics{img/homescreen.png}
-		\caption{HomeScreen activity}
+	\begin{minipage}[b]{0.47\textwidth}
+		\includegraphics{img/timetableinput.png}
+		\caption{TimetableInput activity}
+	\end{minipage}
+\end{figure}
+
+\clearpage
+\section{Assignment activity}
+The assignment activity creates a ListView that holds all of the users current assignments. Three input options are available. A textbox for the assignment name, a TimePicker to select the time and calendar to select the date. Each ListView item consists of two TextView's for the name and count down timer and a button to delete the assignment once it expires. On creation the ListView is initialized and the database is looped through and all current assignments are returned and stored in a list. This list contains the Display(Code snippet Display) object that was made a Data transfer object to hold all the data from each row. The ListView is then handed a custom ArrayAdapter called Countdown Adapter. The CountdownAdapter starts the timer that provides it with the continue down effect and sets all the views on screen(Code snippet getView()). To do this it uses the custom ViewHolder that was built to create the on screen elements and convert the time from milliseconds to days-hours-minutes-seconds(Code snippet timeDiff) and update the information and TextView with the new time.
+
+\begin{minted}{java}
+private class Display {
+ String name;
+ long expirationTime;
+
+ public Display(String name, long expirationTime) {
+ this.name = name;
+ this.expirationTime = expirationTime;
+ }
+}
+\end{minted}
+
+\begin{minted}{java}
+long timeDiff = mDisplay.expirationTime - currentTime;
+if(timeDiff > 0) {
+ int seconds = (int) (timeDiff / 1000) % 60;
+ int minutes = (int) ((timeDiff / (1000 * 60)) % 60);
+ int hours = (int) ((timeDiff / (1000 * 60 * 60)) % 24);
+ int days = (int) ((timeDiff / 1000) / 86400);
+ tvTimeRemaining.setText(format("%d days %d hrs %d min's %d sec", days, hours, minutes, seconds));
+ return days;
+}else {
+   tvTimeRemaining.setText("Expired!!");
+   return 0;
+ }
+\end{minted}
+
+\begin{minted}{java}
+public View getView(int position, View convertView, ViewGroup parent) {
+ 
+ ViewHolder holder;
+ if (convertView == null) {
+  holder = new ViewHolder();//get our view
+  convertView = lf.inflate(R.layout.assignment_list_items, parent, false);//add our list
+  holder.name = (TextView) convertView.findViewById(R.id.name);//setup out name
+  holder.tvTimeRemaining = (TextView) convertView.findViewById(R.id.timeRemaining);//and time left
+  deleteButton = (ImageButton) convertView.findViewById(R.id.deleteButton);
+  convertView.setTag(holder);//set our view to hold these
+  synchronized (lstHolders) {
+   lstHolders.add(holder);//add our holder to the list
+  }
+ }else {
+   holder = (ViewHolder) convertView.getTag();
+  }
+ 
+ holder.setData(getItem(position));//set all the data to it
+ 
+ //decide what colour to set based on remaining time
+ String daysLeft = getColour(holder.updateTimeRemaining(System.currentTimeMillis()));
+ if(daysLeft.equals("red")){
+ convertView.setBackgroundColor(Color.rgb(255,0,50));
+ }if(daysLeft.equals("orange")){
+ convertView.setBackgroundColor( Color.rgb(255,165,0));
+ }if(daysLeft.equals("green")){
+ convertView.setBackgroundColor(Color.rgb(0,255,127));
+ }
+ 
+ return convertView;
+}
+\end{minted}
+
+\begin{figure}[!tbp]
+	\begin{minipage}[b]{0.47\textwidth}
+		\includegraphics{img/assignment.png}
+		\caption{Assignment activity}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.47\textwidth}
+		\includegraphics{img/assignmentinput.png}
+		\caption{AssignmentInput}
 	\end{minipage}
 \end{figure}
 
