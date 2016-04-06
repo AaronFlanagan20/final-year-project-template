@@ -41,21 +41,110 @@ At the end of a features cycle, some testing was performed before moving on. Thi
 \end{figure}
 
 \chapter{Technology Review}
-About seven to ten pages.
-\begin{itemize}
-\item Describe each of the technologies you used at a conceptual level. Standards, Database Model (e.g. MongoDB, CouchDB), XMl, WSDL, JSON, JAXP.
-\item Use references (IEEE format, e.g. [1]), Books, Papers, URLs (timestamp) – sources should be authoritative. 
-\end{itemize}
+\section{Android}
+This project was built for the Android operating system. "Android is the customizable, easy to use operating system that powers more than a billion devices across the globe — from phones and tablets to watches, TV, cars and more to come"~\cite{android}. Android is currently owned, founded and created by Google. It is built using the Java programming language. It combines all that Java has to offer with some custom made Java objects that Android use to interact with the UI component of an application like a TextView or ListView. Android overall is almost a perfect system. It's complete, modular and consistent. It makes use of the full operating system the device is running and provides high level APIs for all tasks. From a developer and users stand point it is powerful, smooth and really responsive ~\cite{androidsystem}. Each section of the application is called an activity. An activity is defined by it's layout file that is in form of an XML document, discussed in the next section. These activities all perform independently from each other unless programmed otherwise. Only one can be open at a time, but another activity can be running in the background waiting for a result of the currently active one. Below is an example of an activities life cycle: Figure 3.1
 
-\section{XML}
-Here's some nicely formatted XML:
-\begin{minted}{xml}
-<this>
-  <looks lookswhat="good">
-    Good
-  </looks>
-</this>
-\end{minted}
+\begin{figure}[h]
+	\centering
+	\includegraphics{img/activity-lifecycle.png}
+	\caption{Android lifecycle}
+\end{figure} 
+
+\pagebreak
+\section{Android XML}
+ Each element in the layout file stands for something that will be displayed on screen. The activity details are specified at the top and then everything is inside a container layout like a FlowLayout our LinearLayout. The element can then be pro-grammatically fetched and used within the class to specify how it should act with an action. Below is an example of a layout class that was used for the about page section of the application.
+ 
+ \begin{minted}{xml}
+ <?xml version="1.0" encoding="utf-8"?>
+ 
+ <android.support.design.widget.CoordinatorLayout
+ xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ android:fitsSystemWindows="true"
+ tools:context="com.collegeessentials.main.About">
+ 
+ <android.support.design.widget.AppBarLayout
+ android:id="@+id/assignmentBar"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ app:theme="@style/AppTheme">
+ 
+ <android.support.v7.widget.Toolbar
+ android:id="@+id/assignmentToolbar"
+ android:layout_width="match_parent"
+ android:layout_height="?attr/actionBarSize"
+ android:background="?attr/colorPrimary"
+ android:theme="@style/AppTheme" />
+ 
+ </android.support.design.widget.AppBarLayout>
+ 
+ <RelativeLayout
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ xmlns:android="http://schemas.android.com/apk/res/android"
+ android:background="@drawable/background">
+ 
+ <TextView
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="CollegeEssentials aims to help with the navigation and life of a student throughout their college.\n\nDepending on your location, arrows will be displayed on camera directing you to certain sections of the college that you are in.\n\n CollegeEssentials' main features: \n \t1. Navigation around your college.\n \t2. Timetable section to store your classes. \n \t3. A colour coded assignment countdown timer:"
+ android:id="@+id/aboutAppText"
+ android:textSize="14dp"
+ android:textColor="@color/wallet_hint_foreground_holo_dark"
+ android:typeface="serif"
+ android:focusableInTouchMode="false"
+ android:layout_alignParentTop="true"
+ android:layout_alignParentLeft="true"
+ android:layout_alignParentStart="true"
+ android:layout_marginTop="107dp" />
+ 
+ <TextView
+ android:layout_width="150dp"
+ android:layout_height="50dp"
+ android:id="@+id/colourText"
+ android:textColor="@color/wallet_hint_foreground_holo_dark"
+ android:text="Green is 3 weeks.\nOrange is 2 weeks.\nRed is 1 week.\n"
+ android:layout_marginLeft="24dp"
+ android:layout_marginStart="24dp"
+ android:layout_below="@+id/aboutAppText"
+ android:layout_alignParentLeft="true"
+ android:layout_alignParentStart="true" />
+ 
+ <TextView
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:text="Please feel free to contact us with your questions"
+ android:textSize="14dp"
+ android:typeface="serif"
+ android:gravity="center"
+ android:textColor="@color/wallet_hint_foreground_holo_dark"
+ android:id="@+id/contactText"
+ android:layout_above="@+id/contactButton" />
+ 
+ <TextView
+ android:layout_width="50dp"
+ android:layout_height="25dp"
+ android:id="@+id/contactButton"
+ android:textColor="@color/wallet_holo_blue_light"
+ android:text="here"
+ android:textSize="16dp"
+ android:gravity="center"
+ android:layout_marginBottom="26dp"
+ android:layout_alignParentBottom="true"
+ android:layout_centerHorizontal="true" />
+ 
+ </RelativeLayout>
+ </android.support.design.widget.CoordinatorLayout>
+ \end{minted}
+ 
+\section{SQLite}
+
+\section{PostgreSQL}
+
+
 
 \chapter{System Design}
 \section{Server connection}
