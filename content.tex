@@ -52,20 +52,7 @@ This project was built for the Android operating system. "Android is the customi
 
 \pagebreak
 \section{Android XML}
-Each element in the layout file stands for something that will be displayed on screen. The activity details are specified at the top and then everything is inside a container layout like a FlowLayout our LinearLayout. The element can then be programmatically fetched and used within the class to specify how it should act with an action. We are currently using XML version 1.0. This is the most widely used version of android XML. There is however a newer version, XML 1.1. This version changes the set of allowed element and attribute names (XML 1.0 had a fixed set of names and new characters added to Unicode were not allowed in names; XML 1.1 changed that to an open set such that all currently unallocated code points to be used in names). This change applies to XML 1.0 5th edition as well as XML 1.1. XML 1.1 changed the white space characters treating the IBM NEL terminator U+2028 as an end of line character. It changed the rules around control characters allowing them (apart from code point 0) into XML encoded as numeric character references, so \&\#1; is legal in XML 1.1 but not XML 1.0. In the future updates of XML I would hope they would update it in a few ways as follows:
-\begin{itemize}
-\item elimination of DTDs from syntax,
-\item integration of namespaces,
-\item XML Base and XML Information Set (info set) into the base standard
-\end{itemize}
-For each different aspect of our application we had a corresponding XML file that created formality among the different views making them all follow the same uniform. This factor creates an aesthetically pleasing application. This means that each layout will float freely and can overlap one another. Each activity, such as the assignment or the college selection, references a standard layout which makes them have the same look, creating a nice flow between views.  We had a parent XML file that we referenced to in each section of our application, giving the same shape and form to each different view in our android application. For example:
-\begin{minted}{xml}
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-\end{minted}
-This meant that each section of the class would have the same layout as the parent which gives the application consistency and saves us from setting the same height and width by hand every time.
-
-Each button, toolbar, picture and anything else that is displayed on the screen in our application is controlled by the layout folder containing all the XML documents. When a button is clicked it triggers the button and checks to see if it is linked to any code within the java folder and executes any runnable code when the button is clicked. In the timetable XML file there is a grid that can be filled with any information that a regular timetable would store. This is done by having a toolbar with a ‘+’ on it and when that button is pressed it takes you to a new layout which has different fields where information, time and place can be inserted. Once the correct information is inserted the information is transferred from the current layout to the timetable XML file and displays it on the screen. Below is an example of a layout class that was used for the about page section of the application and Figure 3.2 showing the projects layout files.
+Each element in the layout file stands for something that will be displayed on screen. The activity details are specified at the top and then everything is inside a container layout like a FlowLayout our LinearLayout. The element can then be programmatically fetched and used within the class to specify how it should act with an action. For each different aspect of our application we had a corresponding XML file that created formality among the different components making them all follow the same uniform on screen. This factor creates an aesthetically pleasing application, without it each component will float freely and can overlap one another. Each activity, such as the assignment or the timtable activity class, references a standard layout which means just because one activity uses a FlowLayout another can not use a LinearLayout. Each button, image, list etc.. that is displayed on the screen in our application is controlled by the layout folder containing all the XML documents. When a button is clicked it triggers the button and checks to see if it is linked to any code within the java folder and executes any runnable code when the button is clicked. In the timetable XML file there is a grid that can be filled with any information that a regular timetable would store. This is done by having a toolbar with a ‘+’ on it and when that button is pressed it takes you to a new layout which has different fields where the module name, time and place can be inserted. Once the correct information is inserted the it is transferred from the current layout to the timetable XML file and displays it on the screen. Below is an example of a layout class that was used for the about page section of the application and Figure 3.2 showing the projects layout files.
  
  \begin{minted}{XML}
  <?XML version="1.0" encoding="utf-8"?>
@@ -153,16 +140,17 @@ Each button, toolbar, picture and anything else that is displayed on the screen 
  </android.support.design.widget.CoordinatorLayout>
  \end{minted}
  
- \begin{figure}
+ \begin{figure}[h]
  	\caption{Android studio files}
  	\includegraphics{img/screenshot.jpg}
  \end{figure}
  
+
 \section{SQLite}
 
+
+
 \section{PostgreSQL}
-
-
 
 \chapter{System Design}
 \section{Server connection}
