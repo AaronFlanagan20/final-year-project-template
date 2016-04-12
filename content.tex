@@ -52,7 +52,7 @@ This project was built for the Android operating system. "Android is the customi
 
 \pagebreak
 \section{Android XML}
-Each element in the layout file stands for something that will be displayed on screen. The activity details are specified at the top and then everything is inside a container layout like a FlowLayout our LinearLayout. The element can then be programmatically fetched and used within the class to specify how it should act with an action. For each different aspect of our application we had a corresponding XML file that created formality among the different components making them all follow the same uniform on screen. This factor creates an aesthetically pleasing application, without it each component will float freely and can overlap one another. Each activity, such as the assignment or the timtable activity class, references a standard layout which means just because one activity uses a FlowLayout another can not use a LinearLayout. Each button, image, list etc.. that is displayed on the screen in our application is controlled by the layout folder containing all the XML documents. When a button is clicked it triggers the button and checks to see if it is linked to any code within the java folder and executes any runnable code when the button is clicked. In the timetable XML file there is a grid that can be filled with any information that a regular timetable would store. This is done by having a toolbar with a ‘+’ on it and when that button is pressed it takes you to a new layout which has different fields where the module name, time and place can be inserted. Once the correct information is inserted the it is transferred from the current layout to the timetable XML file and displays it on the screen. Below is an example of a layout class that was used for the about page section of the application and Figure 3.2 showing the projects layout files.
+Each element in the layout file represents something that will be displayed on screen. The activity details are specified at the top and then everything is inside a container layout like a FlowLayout our LinearLayout. The element can then be programmatically fetched and used within the class to specify how it should act with an action. For each different aspect of our application we had a corresponding XML file that created formality among the different components making them all follow the same uniform on screen. This factor creates an aesthetically pleasing application, without it each component will float freely and can overlap one another. Each activity, such as the assignment or the timtable activity class, references a standard layout which means just because one activity uses a FlowLayout another can not use a LinearLayout. Each button, image, list etc.. that is displayed on the screen in our application is controlled by the layout folder containing all the XML documents. When a button is clicked it triggers the button and checks to see if it is linked to any code within the java folder and executes any runnable code when the button is clicked. In the timetable XML file there is a grid that can be filled with any information that a regular timetable would store. This is done by having a toolbar with a ‘+’ on it and when that button is pressed it takes you to a new layout which has different fields where the module name, time and place can be inserted. Once the correct information is inserted the it is transferred from the current layout to the timetable XML file and displays it on the screen. Below is an example of a layout class that was used for the about page section of the application and Figure 3.2 showing the projects layout files.
  
  \begin{minted}{XML}
  <?XML version="1.0" encoding="utf-8"?>
@@ -147,10 +147,10 @@ Each element in the layout file stands for something that will be displayed on s
  
 
 \section{SQLite}
-
-
+SQLite is an open-source platform independent database management system. It is small, fast and free ~\cite{sqlite}. It was chosen due to it's available features and because it is cross-platform. Multiple programs can be written in various languages like Java, PHP or even C++ and they can all access the same database file without compatibility being an issue. Almost all phone vendors and developers support SQLite. It is one of the largest deployed databases in world due to it's popularity, reliability, consistency and high performance rate when in use. The database file format can be freely copied and moved between various systems without any problems, this also applies to 32-bit and 64-bit systems and big-endian and little-endian. Another key aspect of this is the library size and database file size are both relatively small. It can be configured to run on a minimal stack space of 4KiB if needed, but usually it is sized at only 500kiB depending on the target platform. The application only has to load as much data as it needs, rather than reading the entire application file and holding a complete copy in memory. Start up time and memory consumption are reduced due to this. It stores everything in one file rather than a pile of files, making it structural and abstract because only databases created in Android are visible to the application that created them. When the application is shut down all databases are destroyed meaning only the needed information can be loaded at runtime. The state of the database is always consistent even in the event of a phone crash or power failure, this is because it uses the atomic, isolated, consistent and durable (acid) features. An SQLite database can also be queried and the data retrieval is much more robust. If you have data that is relative the file allows no association but SQLite helps with that.
 
 \section{PostgreSQL}
+"PostgreSQL is a powerful, open source object-relational database system. It has more than 15 years of active development and a proven architecture that has earned it a strong reputation for reliability, data integrity, and correctness." ~\cite{postgres}. PostgreSql is a external database used for this application that is connected to at runtime and holds the relevant information for each college. Based on the college selected only the information for that selection will be retrieved and used. The PostgreSQL database used is held and maintained by Heroku, a continuous deployment company. This database was used because originally the project was going to be testes by CircleCI, a continuous integration platform and then be passed onto Heroku for deployment. However the project had files the CircleCI didn't like but Heroku needed and vice versa. Instead the database was used because it had easy access and it was already set-up to the repository own GitHub. Just like SQLite it is cross-platform, open source, robust, consistent, stable and supports ACID and transactions, which are the basic functionalities of a relational DBMS. Any device or program can connect to it without compatibility being an issue. It supports all functionality most relational database management systems do, but they are known for their data integrity and developer features. Making processes like joining very large tables of information simple. Although it's slower than MySQL this is because they focus on optimizing query performance where PostgreSQL allows for more flexible actions like table joins and data clean-ups for the developers or using storing procedures. They focus more on the functionality and less on performance, which can be a big downfall for responsive software and websites for example.
 
 \chapter{System Design}
 \section{Server connection}
@@ -332,6 +332,65 @@ public View getView(int position, View convertView, ViewGroup parent) {
 		\caption{AssignmentInput}
 	\end{minipage}
 \end{figure}
+
+\pagebreak
+\section{Augmented Reality}
+"Augmented reality (AR) is a live, direct or indirect, view of a physical, real-world environment whose elements are augmented by computer-generated sensory input such as sound, video, graphics or GPS data"~\cite{aug_wiki}. Augmented reality was included in this project in the form of navigation around the selected college with a rotating arrow. This arrow points towards the location the user wants to go. On start-up of the camera activity the phone will call its camera instance and place a preview on top of it. This means the camera can be controlled and changed without altering the actual camera instance. This is accomplished by extending the SurfaceHolder object in the CameraPreview class and implementing the SurfaceHolder.Callback to receive updates when the surface changes. A SurfaceHolder is an "abstract interface to someone holding a display surface. Allows you to control the surface size and format, edit the pixels in the surface, and monitor changes to the surface"~\cite{surfaceholder}. The DrawView object is then created and added to the preview. DrawView extends the SurfaceView object which is a drawing surface embedded into the SurfaceHolder. You get a reference to the main layout and add the preview to it and then add the draw view on top of that. Like so: 
+\begin{minted}{java}
+ mCameraPreview = new CameraPreview(this,c);
+ alParent.addView(mCameraPreview);
+ 
+ // Create a new draw view and add it to the layout
+ DrawView drawView = new DrawView(this);
+ alParent.addView(drawView);
+\end{minted}
+
+It then allows the camera to be drawn on using the onDraw method within DrawView thus creating the augmented reality effect. The draw method starts by getting the phones location by making a call to the PhoneLocation object. It then sets the point we want to go to, which in the future will be a call to the database. It will then paint an arrow on screen, calculate the degrees between the current latitude longitude point and the desired points and rotate the arrow to point in that direction.
+\begin{minted}{java}
+@Override
+protected void onDraw(Canvas canvas) {
+ super.onDraw(canvas);
+
+ canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+
+ loc.getPreviousLocations();//stores last location
+
+ to = loc.getToLocation();
+ from = loc.getFromLocation();
+
+ to.setLatitude(53.2831252);
+ to.setLongitude(-9.0414227);
+
+ degrees = getDegrees(from.getLatitude(), from.getLongitude(), to.getLatitude(), to.getLongitude());
+
+ canvas.rotate((float) degrees, canvas.getWidth() / 2, canvas.getHeight() / 2);
+
+ //gmit canteen 53.2791608,-9.0105963
+ textPaint.setARGB(255, 200, 0, 0);//Colour red - ish
+ textPaint.setStyle(Paint.Style.FILL);
+
+ /* Top arrow*/
+ textPaint.setTextSize(70);
+ canvas.drawText(degrees + "", 1100, 500, textPaint);
+
+ textPaint.setStrokeWidth(20);
+ canvas.drawLine(1250, 100, 1250, 400, textPaint);
+
+ textPaint.setStyle(Paint.Style.STROKE);
+ textPaint.setStrokeWidth(2);
+ textPaint.setColor(Color.RED);
+
+ Path path = new Path();
+ path.moveTo(0, -100);
+ path.lineTo(50, 0);
+ path.lineTo(-50, 0);
+ path.close();
+
+ path.offset(1250, 100);
+ canvas.drawPath(path, textPaint);
+ 
+}
+\end{minted}
 
 \chapter{System Evaluation}
 \section{Memory and Server}
